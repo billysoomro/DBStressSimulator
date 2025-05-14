@@ -10,13 +10,14 @@ namespace DBStressSimulator.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ConnectionManager _connectionManager;
         private readonly CpuStressManager _cpuStressManager;
+        private readonly DatabaseReaderService _readerService;
 
-
-        public HomeController(ILogger<HomeController> logger, ConnectionManager connectionManager, CpuStressManager cpuStressManager)
+        public HomeController(ILogger<HomeController> logger, ConnectionManager connectionManager, CpuStressManager cpuStressManager, DatabaseReaderService readerService)
         {
             _logger = logger;
             _connectionManager = connectionManager;
             _cpuStressManager = cpuStressManager;
+            _readerService = readerService;
         }
 
         public IActionResult Index()
@@ -51,9 +52,6 @@ namespace DBStressSimulator.Controllers
 
             TempData["Message"] = $"Started {count} {testMode} workers";
             return RedirectToAction("Index");
-
-            //_cpuStressManager.StartWorkers(count);
-            //return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -63,9 +61,26 @@ namespace DBStressSimulator.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Privacy()
+        public IActionResult Reader()
         {
             return View();
+        }
+
+        [HttpPost("start")]
+        public IActionResult Start()
+        {
+            _readerService.StartReading();
+            TempData["Message"] = "Reading started successfully";
+            return RedirectToAction("Reader");
+        }
+
+        [HttpPost("stop")]
+        public async Task<IActionResult> Stop()
+        {
+            await _readerService.StopReading();
+
+            TempData["Message"] = "Reading stopped successfully";
+            return RedirectToAction("Reader");            
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

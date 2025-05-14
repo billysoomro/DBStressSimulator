@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Database Reader Control";
+}
+
+<div class="container mt-5">
+    <h2>Database Reader Control</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">@TempData["Message"]</div>
+    }
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Reader Actions</h5>
+
+            <form method="post" asp-action="Start" class="mb-3">
+                <button type="submit" class="btn btn-success">Start Reading</button>
+            </form>
+
+            <form method="post" asp-action="Stop" class="mb-3">
+                <button type="submit" class="btn btn-danger">Stop Reading</button>
+            </form>
+            
+        </div>
+    </div>
+</div>

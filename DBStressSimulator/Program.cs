@@ -9,6 +9,10 @@ var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddSingleton(new ConnectionManager(connStr));
 builder.Services.AddSingleton(new CpuStressManager(connStr));
 
+builder.Services.AddSingleton<DatabaseReaderService>(provider =>
+    new DatabaseReaderService(connStr, provider.GetRequiredService<ILogger<DatabaseReaderService>>()
+    ));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
